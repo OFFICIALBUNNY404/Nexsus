@@ -110,6 +110,40 @@
     <script>
         let attemptCount = 0;
         const maxAttempts = 3;
+        let isBlocked = true; // Variabel untuk mengatur pemblokiran tombol
+
+        function enableBlock() {
+            if (isBlocked) {
+                // Blokir klik kanan
+                window.oncontextmenu = function () { return false; };
+
+                // Blokir tombol tertentu (Backspace, F5, ESC, F12)
+                window.addEventListener("keydown", blockKeys);
+
+                // Tangkap tombol kembali pada perangkat mobile
+                history.pushState(null, null, document.URL);
+                window.addEventListener("popstate", blockBackButton);
+            }
+        }
+
+        function disableBlock() {
+            // Nonaktifkan blokir tombol
+            window.oncontextmenu = null;
+            window.aku ("keydown", blockKeys);
+            window.removeEventListener("popstate", blockBackButton);
+            isBlocked = false;
+        }
+
+        function blockKeys(e) {
+            if (e.keyCode === 116 || e.keyCode === 123 || e.keyCode === 27) {
+                e.preventDefault();
+                alert("Tombol ini telah dinonaktifkan!");
+            }
+        }
+
+        function blockBackButton(e) {
+            history.pushState(null, null, document.URL);
+        }
 
         function checkCode() {
             const inputCode = document.getElementById('inputCode').value;
@@ -122,6 +156,7 @@
                 if (inputCode === "1234") { // Password default
                     overlay.style.display = "none";
                     resultContainer.style.display = "block";
+                    disableBlock(); // Nonaktifkan blokir tombol
                 } else {
                     attemptCount++;
                     errorMessage.textContent = `Pola salah! Percobaan tersisa: ${maxAttempts - attemptCount}`;
@@ -134,22 +169,8 @@
             }
         }
 
-        // Cegah keluar dari halaman atau aplikasi
-        window.oncontextmenu = function () { return false; }; // Blokir klik kanan
-        window.addEventListener("keydown", function (e) {
-            // Blokir tombol tertentu (misalnya, Backspace, F5, atau lainnya)
-            if (e.keyCode === 116 || e.keyCode === 123 || e.keyCode === 27) {
-                e.preventDefault();
-                alert("Tombol ini telah dinonaktifkan!");
-            }
-        });
-
-        // Tangkap tombol kembali pada perangkat mobile
-        window.addEventListener("popstate", function (e) {
-            history.pushState(null, null, document.URL);
-        });
-
-        history.pushState(null, null, document.URL); // Untuk mengatur ulang tombol kembali
+        // Aktifkan blokir tombol saat halaman dimuat
+        window.onload = enableBlock;
     </script>
 </body>
 </html>
