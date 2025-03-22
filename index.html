@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ransomware Mr.BUNNY404</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .image-container {
+            margin-bottom: 20px;
+        }
+        #mainImage {
+            max-width: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+        .overlay h1 {
+            color: #f05454;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .overlay p {
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        #inputCode {
+            padding: 10px;
+            width: 80%;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #f05454;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff6b6b;
+        }
+        .error {
+            color: #ff4d4d;
+            font-size: 14px;
+        }
+        .result-container {
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .result-container h1 {
+            color: #4caf50;
+            font-size: 24px;
+        }
+        .encrypt-message {
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            color: #ff4d4d;
+            font-size: 24px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img src="https://files.catbox.moe/39muz6.png" alt="Gambar yang Diinginkan" id="mainImage">
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="message">
+            <h1>Smartphone Anda Terkunci📵🔑</h1>
+            <p>Masukkan pola untuk membuka kunci:</p>
+            <input type="password" id="inputCode" placeholder="Masukkan pola">
+            <button onclick="checkCode()">Kirim</button>
+            <p id="errorMessage" class="error"></p>
+        </div>
+    </div>
+    <div class="result-container" id="resultContainer" style="display: none;">
+        <h1>Opened Successfully 🔓🔑</h1>
+        <p>Target failed to encrypt 📵 to Ransomware MR.BUNNY404</p>
+    </div>
+    <div class="encrypt-message" id="encryptMessage" style="display: none;">
+        <h1>Semua file telah dienkripsi 📂🔒</h1>
+        <p>Hubungi administrator untuk pemulihan data.</p>
+    </div>
+    <script>
+        let attemptCount = 0;
+        const maxAttempts = 3;
+
+        function checkCode() {
+            const inputCode = document.getElementById('inputCode').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const overlay = document.getElementById('overlay');
+            const resultContainer = document.getElementById('resultContainer');
+            const encryptMessage = document.getElementById('encryptMessage');
+
+            if (attemptCount < maxAttempts) {
+                if (inputCode === "1234") { // Password default
+                    overlay.style.display = "none";
+                    resultContainer.style.display = "block";
+                } else {
+                    attemptCount++;
+                    errorMessage.textContent = `Pola salah! Percobaan tersisa: ${maxAttempts - attemptCount}`;
+                }
+            }
+
+            if (attemptCount >= maxAttempts) {
+                overlay.style.display = "none";
+                encryptMessage.style.display = "block";
+            }
+        }
+
+        // Cegah keluar dari halaman atau aplikasi
+        window.oncontextmenu = function () { return false; }; // Blokir klik kanan
+        window.addEventListener("keydown", function (e) {
+            // Blokir tombol tertentu (misalnya, Backspace, F5, atau lainnya)
+            if (e.keyCode === 116 || e.keyCode === 123 || e.keyCode === 27) {
+                e.preventDefault();
+                alert("Tombol ini telah dinonaktifkan!");
+            }
+        });
+
+        // Tangkap tombol kembali pada perangkat mobile
+        window.addEventListener("popstate", function (e) {
+            history.pushState(null, null, document.URL);
+        });
+
+        history.pushState(null, null, document.URL); // Untuk mengatur ulang tombol kembali
+    </script>
+</body>
+</html>
